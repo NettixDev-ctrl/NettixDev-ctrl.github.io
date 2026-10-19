@@ -313,6 +313,30 @@
 </section>
 
 <script>
+// "проекты ↓": eased scroll down to the projects panel
+(() => {
+  const cue = document.querySelector('.cue'), target = document.getElementById('projects');
+  if (!cue || !target || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const ease = t => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;   // easeInOutCubic
+  let raf = 0;
+  const stop = () => { cancelAnimationFrame(raf); raf = 0; };
+  ['wheel', 'touchstart', 'keydown'].forEach(ev => addEventListener(ev, stop, { passive: true }));
+  cue.addEventListener('click', e => {
+    e.preventDefault();
+    stop();
+    const from = scrollY;
+    const to = Math.min(target.getBoundingClientRect().top + from - 24, document.documentElement.scrollHeight - innerHeight);
+    const dur = Math.min(1400, 600 + Math.abs(to - from) * .45), t0 = performance.now();
+    const tick = now => {
+      const p = Math.min((now - t0) / dur, 1);
+      scrollTo(0, from + (to - from) * ease(p));
+      raf = p < 1 ? requestAnimationFrame(tick) : 0;
+    };
+    raf = requestAnimationFrame(tick);
+  });
+})();
+</script>
+<script>
 // projects: pick a project in the list, its window shows on the stage
 (() => {
   const items = [...document.querySelectorAll('.item')];
