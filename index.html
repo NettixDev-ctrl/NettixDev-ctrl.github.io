@@ -1,0 +1,343 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>nettixdev</title>
+<meta name="description" content="nettixdev — личная страничка">
+<link rel="icon" href="avatar.jpg">
+<style>
+  :root {
+    --bg-1: #031a52;
+    --bg-2: #0b3a9e;
+    --bg-3: #1458d6;
+    --ink: #eef5ff;
+    --ink-dim: #a9c3ee;
+    --glass: rgba(2, 12, 50, .18);
+    --glass-edge: rgba(190, 220, 255, .28);
+    --accent: #7cc4ff;
+    --accent-2: #c9e4ff;
+  }
+  * { box-sizing: border-box; margin: 0; }
+  html { color-scheme: dark; }
+  body {
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    padding: 24px 16px;
+    font-family: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+    color: var(--ink);
+    background: #082a80;
+    overflow-x: hidden;
+  }
+
+  #topo { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
+
+  #petals { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
+
+  .card {
+    position: relative; z-index: 1;
+    width: min(460px, 100%);
+    padding: 36px 28px 28px;
+    text-align: center;
+    background: var(--glass);
+    border: 1px solid var(--glass-edge);
+    border-radius: 28px;
+    backdrop-filter: blur(18px) saturate(140%);
+    -webkit-backdrop-filter: blur(18px) saturate(140%);
+    box-shadow:
+      0 30px 80px -20px rgba(0, 10, 50, .7),
+      inset 0 1px 0 rgba(255,255,255,.25);
+    animation: rise .8s cubic-bezier(.2,.8,.2,1) both;
+  }
+  @keyframes rise { from { opacity: 0; transform: translateY(18px); } }
+
+  .avatar { position: relative; width: 160px; height: 160px; margin: 0 auto 18px; }
+  .avatar img {
+    position: absolute; inset: 14px; width: 132px; height: 132px;
+    border-radius: 50%; object-fit: cover;
+  }
+  .avatar svg { position: absolute; inset: 0; width: 100%; height: 100%; fill: none; }
+  .avatar circle { fill: #dcebff; }
+
+  h1 {
+    font-size: 2.2rem; font-weight: 700; letter-spacing: -.02em;
+    color: #fff;
+  }
+  .handle { margin-top: 2px; color: var(--ink-dim); font-size: .95rem; }
+
+  .bio { margin: 20px 0 22px; font-size: 1.15rem; color: #d6e6ff; }
+
+  .term {
+    text-align: left;
+    padding: 14px 16px;
+    font: .85rem/1.7 ui-monospace, "JetBrains Mono", "Fira Code", monospace;
+    color: var(--ink-dim);
+    background: rgba(2, 12, 45, .45);
+    border: 1px solid rgba(160, 200, 255, .15);
+    border-radius: 14px;
+  }
+  .term b { color: var(--accent); font-weight: 500; }
+  .term i { color: #fff; font-style: normal; }
+  .caret { display: inline-block; width: .5em; height: 1em; background: var(--accent); vertical-align: -2px; animation: blink 1s steps(1) infinite; }
+  @keyframes blink { 50% { opacity: 0; } }
+
+
+  .links { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 12px; margin-top: 24px; }
+  .pair { display: flex; align-items: center; gap: 10px; }
+  .btn {
+    display: grid; place-items: center;
+    height: 52px;
+    color: var(--ink); text-decoration: none;
+    background-color: rgba(255,255,255,.1);
+    border: 1px solid rgba(200, 225, 255, .35);
+    border-radius: 999px;
+    transition: background-color .2s, color .2s, border-color .2s, transform .15s;
+  }
+  .btn.round { width: 52px; }
+  .btn svg { width: 24px; height: 24px; fill: currentColor; }
+  .btn:hover { background-color: #eef5ff; color: #061a5c; border-color: #fff; }
+  .btn:active { transform: scale(.97); }
+  .btn:focus-visible { outline: 2px solid var(--accent-2); outline-offset: 3px; }
+
+  footer { margin-top: 26px; font-size: .78rem; color: rgba(190,215,255,.55); }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+    #petals { display: none; }
+  }
+</style>
+</head>
+<body>
+<canvas id="topo" aria-hidden="true"></canvas>
+<canvas id="petals" aria-hidden="true"></canvas>
+
+<main class="card">
+  <div class="avatar">
+    <svg id="ring" viewBox="0 0 160 160" aria-hidden="true"></svg>
+    <img src="avatar.jpg" alt="Аватар nettixdev">
+  </div>
+
+  <h1>nettixdev</h1>
+  <p class="handle">@NettixDev-ctrl</p>
+
+  <p class="bio">страдаю хуйнёй</p>
+
+  <div class="term" aria-label="whoami">
+    <div><b>~ $</b> <i>whoami</i></div>
+    <div>nettixdev</div>
+    <div><b>~ $</b> <i>uname -r</i></div>
+    <div>6.18-cachyos-lts</div>
+    <div><b>~ $</b> <span class="caret"></span></div>
+  </div>
+
+  <div class="links">
+    <div class="pair">
+      <a class="btn round" href="https://github.com/NettixDev-ctrl" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+        <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.6 7.6 0 0 1 4 0c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+      </a>
+    </div>
+    <div class="pair">
+      <a class="btn round" href="https://t.me/nettixcl" target="_blank" rel="noopener noreferrer" aria-label="Telegram">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+      </a>
+    </div>
+  </div>
+
+  <footer>© 2026 nettixdev</footer>
+</main>
+
+<script>
+// avatar ring: slowly rotating dots that swell and brighten toward the cursor
+(() => {
+  const svg = document.getElementById('ring'), NS = 'http://www.w3.org/2000/svg';
+  const N = 56, R = 77, REACH = 150, SPEED = .16;   // SPEED: radians per second
+  const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const dots = [];
+  for (let i = 0; i < N; i++) {
+    const el = document.createElementNS(NS, 'circle');
+    svg.appendChild(el);
+    dots.push({ el, a: i / N * Math.PI * 2, k: 0 });
+  }
+  let px = null, py = null, spin = 0, last = performance.now();
+  addEventListener('pointermove', e => { px = e.clientX; py = e.clientY; });
+  document.documentElement.addEventListener('pointerleave', () => { px = null; });
+  addEventListener('blur', () => { px = null; });
+
+  const frame = now => {
+    const dt = Math.min((now - last) / 1000, .1); last = now;
+    if (!still) spin += SPEED * dt;
+    const b = svg.getBoundingClientRect(), sc = b.width / 160;
+    for (const d of dots) {
+      const a = d.a + spin, x = 80 + R * Math.cos(a), y = 80 + R * Math.sin(a);
+      let t = 0;
+      if (px !== null) t = Math.max(0, 1 - Math.hypot(b.left + x * sc - px, b.top + y * sc - py) / REACH) ** 2;
+      d.k += (t - d.k) * .12;
+      d.el.setAttribute('cx', x.toFixed(2)); d.el.setAttribute('cy', y.toFixed(2));
+      d.el.setAttribute('r', (1.2 + d.k * 1.8).toFixed(2));
+      d.el.setAttribute('opacity', (.4 + d.k * .6).toFixed(2));
+    }
+    requestAnimationFrame(frame);
+  };
+  requestAnimationFrame(frame);
+})();
+</script>
+<script>
+// interactive topographic contours: marching squares over noise + a hill that follows the cursor
+(() => {
+  const c = document.getElementById('topo');
+  const ctx = c.getContext('2d');
+  const seed = Math.random() * 1000;
+  const hash = (x, y) => { const v = Math.sin(x * 127.1 + y * 311.7 + seed) * 43758.5453; return v - Math.floor(v); };
+  const sm = t => t * t * (3 - 2 * t);
+  const vnoise = (x, y) => {
+    const xi = Math.floor(x), yi = Math.floor(y), xf = sm(x - xi), yf = sm(y - yi);
+    const a = hash(xi, yi), b = hash(xi + 1, yi), c2 = hash(xi, yi + 1), d = hash(xi + 1, yi + 1);
+    return a + (b - a) * xf + (c2 - a) * yf + (a - b - c2 + d) * xf * yf;
+  };
+  const fbm = (x, y) => vnoise(x, y) * .6 + vnoise(x * 2.1, y * 2.1) * .28 + vnoise(x * 4.3, y * 4.3) * .12;
+
+  const cell = 12, step = .045, SIGMA = 240, AMP = .22;
+  let w, h, dpr, cols, rows, base, field;
+  // hill state: current position/strength eased toward the target
+  const m = { x: -9999, y: -9999, tx: -9999, ty: -9999, s: 0, ts: 0, pulse: 0 };
+
+  const build = () => {
+    dpr = Math.min(devicePixelRatio || 1, 2);
+    w = innerWidth; h = innerHeight;
+    c.width = w * dpr; c.height = h * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    cols = Math.ceil(w / cell) + 1; rows = Math.ceil(h / cell) + 1;
+    base = new Float32Array(cols * rows);
+    field = new Float32Array(cols * rows);
+    const k = 1 / 260;
+    for (let j = 0; j < rows; j++) for (let i = 0; i < cols; i++) base[j * cols + i] = fbm(i * cell * k, j * cell * k);
+    dirty = true;
+  };
+
+  const render = () => {
+    field.set(base);
+    const amp = AMP * m.s * (1 + m.pulse);
+    if (amp > .002) {
+      const R = SIGMA * 3, i0 = Math.max(0, Math.floor((m.x - R) / cell)), i1 = Math.min(cols - 1, Math.ceil((m.x + R) / cell));
+      const j0 = Math.max(0, Math.floor((m.y - R) / cell)), j1 = Math.min(rows - 1, Math.ceil((m.y + R) / cell));
+      const k = 1 / (2 * SIGMA * SIGMA);
+      for (let j = j0; j <= j1; j++) for (let i = i0; i <= i1; i++) {
+        const dx = i * cell - m.x, dy = j * cell - m.y;
+        field[j * cols + i] += amp * Math.exp(-(dx * dx + dy * dy) * k);
+      }
+    }
+    const minor = new Path2D(), major = new Path2D();
+    for (let j = 0; j < rows - 1; j++) for (let i = 0; i < cols - 1; i++) {
+      const v0 = field[j * cols + i], v1 = field[j * cols + i + 1], v2 = field[(j + 1) * cols + i + 1], v3 = field[(j + 1) * cols + i];
+      const lo = Math.ceil(Math.min(v0, v1, v2, v3) / step), hi = Math.floor(Math.max(v0, v1, v2, v3) / step);
+      for (let n = lo; n <= hi; n++) {
+        const lvl = n * step;
+        const idx = (v0 > lvl) | ((v1 > lvl) << 1) | ((v2 > lvl) << 2) | ((v3 > lvl) << 3);
+        if (idx === 0 || idx === 15) continue;
+        const x = i * cell, y = j * cell;
+        const t = (a, b) => (lvl - a) / (b - a);
+        const tx = x + t(v0, v1) * cell, ry = y + t(v1, v2) * cell, bx = x + t(v3, v2) * cell, ly = y + t(v0, v3) * cell;
+        const p = n % 5 === 0 ? major : minor;
+        const seg = (ax, ay, bx2, by2) => { p.moveTo(ax, ay); p.lineTo(bx2, by2); };
+        switch (idx) {
+          case 1: case 14: seg(x, ly, tx, y); break;
+          case 2: case 13: seg(tx, y, x + cell, ry); break;
+          case 3: case 12: seg(x, ly, x + cell, ry); break;
+          case 4: case 11: seg(x + cell, ry, bx, y + cell); break;
+          case 5: seg(x, ly, tx, y); seg(x + cell, ry, bx, y + cell); break;
+          case 6: case 9: seg(tx, y, bx, y + cell); break;
+          case 7: case 8: seg(x, ly, bx, y + cell); break;
+          case 10: seg(tx, y, x + cell, ry); seg(x, ly, bx, y + cell); break;
+        }
+      }
+    }
+    ctx.clearRect(0, 0, w, h);
+    ctx.lineWidth = 1; ctx.lineCap = 'round';
+    ctx.strokeStyle = 'rgba(200,225,255,.09)'; ctx.stroke(minor);
+    ctx.strokeStyle = 'rgba(200,225,255,.22)'; ctx.stroke(major);
+  };
+
+  let dirty = true, raf = 0;
+  const loop = () => {
+    raf = 0;
+    const e = .06;
+    m.x += (m.tx - m.x) * e; m.y += (m.ty - m.y) * e;
+    m.s += (m.ts - m.s) * .04;
+    m.pulse *= .95;
+    const moving = Math.abs(m.tx - m.x) > .3 || Math.abs(m.ty - m.y) > .3 || Math.abs(m.ts - m.s) > .003 || m.pulse > .005;
+    if (moving || dirty) { render(); dirty = false; }
+    if (moving) raf = requestAnimationFrame(loop);
+  };
+  const wake = () => { if (!raf) raf = requestAnimationFrame(loop); };
+
+  addEventListener('pointermove', e => {
+    if (m.s < .01) { m.x = e.clientX; m.y = e.clientY; }   // appear right under the cursor
+    m.tx = e.clientX; m.ty = e.clientY; m.ts = 1; wake();
+  });
+  addEventListener('pointerdown', e => { m.tx = e.clientX; m.ty = e.clientY; m.ts = 1; m.pulse = .5; wake(); });
+  document.documentElement.addEventListener('pointerleave', () => { m.ts = 0; wake(); });
+  addEventListener('blur', () => { m.ts = 0; wake(); });
+  let t; addEventListener('resize', () => { clearTimeout(t); t = setTimeout(() => { build(); wake(); }, 150); });
+
+  build(); render();
+})();
+</script>
+<script>
+// falling sakura petals
+(() => {
+  const c = document.getElementById('petals');
+  const ctx = c.getContext('2d');
+  let w, h, dpr;
+  const resize = () => {
+    dpr = Math.min(devicePixelRatio || 1, 2);
+    w = innerWidth; h = innerHeight;
+    c.width = w * dpr; c.height = h * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  };
+  resize(); addEventListener('resize', resize);
+
+  const make = (initial) => ({
+    x: Math.random() * w,
+    y: initial ? Math.random() * h : -20,
+    s: 5 + Math.random() * 8,
+    vy: .4 + Math.random() * .8,
+    vx: -.2 + Math.random() * .5,
+    r: Math.random() * Math.PI * 2,
+    vr: (Math.random() - .5) * .03,
+    ph: Math.random() * Math.PI * 2,
+    a: .45 + Math.random() * .45
+  });
+  const n = Math.min(40, Math.floor(w / 25));
+  const ps = Array.from({ length: n }, () => make(true));
+
+  const petal = (p) => {
+    ctx.save();
+    ctx.translate(p.x, p.y);
+    ctx.rotate(p.r);
+    ctx.scale(1, .6 + .4 * Math.sin(p.ph));
+    ctx.globalAlpha = p.a;
+    ctx.fillStyle = '#e4f0ff';
+    ctx.beginPath();
+    ctx.moveTo(0, -p.s);
+    ctx.bezierCurveTo(p.s, -p.s * .6, p.s * .8, p.s * .7, 0, p.s);
+    ctx.bezierCurveTo(-p.s * .8, p.s * .7, -p.s, -p.s * .6, 0, -p.s);
+    ctx.fill();
+    ctx.restore();
+  };
+
+  const tick = () => {
+    ctx.clearRect(0, 0, w, h);
+    ps.forEach((p, i) => {
+      p.y += p.vy; p.x += p.vx + Math.sin(p.ph) * .35;
+      p.r += p.vr; p.ph += .03;
+      if (p.y > h + 20 || p.x > w + 30 || p.x < -30) ps[i] = make(false);
+      petal(p);
+    });
+    requestAnimationFrame(tick);
+  };
+  tick();
+})();
+</script>
+</body>
+</html>
