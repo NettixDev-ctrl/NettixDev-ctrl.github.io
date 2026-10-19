@@ -17,9 +17,12 @@
     --glass-edge: rgba(190, 220, 255, .28);
     --accent: #7cc4ff;
     --accent-2: #c9e4ff;
+    --hot: #ffffff;
+    --on-hot: #06205e;
   }
   * { box-sizing: border-box; margin: 0; }
   html { color-scheme: dark; }
+  ::selection { background: var(--hot); color: var(--on-hot); }
   body {
     min-height: 100vh;
     font-family: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
@@ -36,7 +39,7 @@
     transition: color .2s;
   }
   .cue:hover { color: #fff; }
-  .cue span { display: inline-block; transition: transform .2s; }
+  .cue span { color: var(--hot); display: inline-block; transition: transform .2s; }
   .cue:hover span { transform: translateY(3px); }
 
   #topo { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
@@ -74,7 +77,7 @@
   }
   .handle { margin-top: 2px; color: var(--ink-dim); font-size: .95rem; }
 
-  .bio { margin: 20px 0 22px; font-size: 1.15rem; color: #d6e6ff; }
+  .bio { margin: 20px 0 22px; font-size: 1.2rem; font-weight: 600; color: var(--hot); }
 
   .term {
     text-align: left;
@@ -85,9 +88,9 @@
     border: 1px solid rgba(160, 200, 255, .15);
     border-radius: 14px;
   }
-  .term b { color: var(--accent); font-weight: 500; }
+  .term b { color: var(--hot); font-weight: 500; }
   .term i { color: #fff; font-style: normal; }
-  .caret { display: inline-block; width: .5em; height: 1em; background: var(--accent); vertical-align: -2px; animation: blink 1s steps(1) infinite; }
+  .caret { display: inline-block; width: .5em; height: 1em; background: var(--hot); vertical-align: -2px; animation: blink 1s steps(1) infinite; }
   @keyframes blink { 50% { opacity: 0; } }
 
 
@@ -96,7 +99,7 @@
   .btn {
     display: grid; place-items: center;
     height: 52px;
-    color: var(--ink); text-decoration: none;
+    color: var(--hot); text-decoration: none;
     background-color: rgba(255,255,255,.1);
     border: 1px solid rgba(200, 225, 255, .35);
     border-radius: 999px;
@@ -104,24 +107,35 @@
   }
   .btn.round { width: 52px; }
   .btn svg { width: 24px; height: 24px; fill: currentColor; }
-  .btn:hover { background-color: #eef5ff; color: #061a5c; border-color: #fff; }
+  .btn:hover { background-color: var(--hot); color: var(--on-hot); border-color: var(--hot); }
   .btn:active { transform: scale(.97); }
-  .btn:focus-visible { outline: 2px solid var(--accent-2); outline-offset: 3px; }
+  .btn:focus-visible { outline: 2px solid var(--hot); outline-offset: 3px; }
 
 
   /* ---- projects ---- */
-  .work { position: relative; z-index: 1; width: min(1040px, 100%); margin: 0 auto; padding: 56px 16px 110px; }
+  .work {
+    position: relative; z-index: 1; width: 100%;
+    padding: 64px max(16px, calc((100% - 1040px) / 2)) 120px;
+    background: rgba(2, 14, 58, .72);
+    border-top: 1px solid rgba(200, 225, 255, .22);
+  }
   .work-head {
     display: flex; justify-content: space-between; align-items: baseline;
     margin-bottom: 22px; padding-bottom: 12px;
     border-bottom: 1px solid rgba(200,225,255,.18);
     font: .85rem ui-monospace, "JetBrains Mono", "Fira Code", monospace; color: var(--ink-dim);
   }
-  .work-head b { color: #fff; font-weight: 500; }
+  .work-head b { color: var(--hot); font-weight: 500; }
   .work-grid { display: grid; grid-template-columns: minmax(0, 360px) minmax(0, 1fr); gap: 32px; align-items: start; }
 
   .index { list-style: none; padding: 0; }
-  .item { border-bottom: 1px solid rgba(200,225,255,.18); }
+  .item { position: relative; border-bottom: 1px solid rgba(200,225,255,.18); }
+  .item::before {
+    content: ""; position: absolute; left: -14px; top: -1px; bottom: -1px; width: 3px;
+    background: var(--hot); transform: scaleY(0); transform-origin: top;
+    transition: transform .4s cubic-bezier(.2,.8,.2,1);
+  }
+  .item.on::before { transform: scaleY(1); }
   .item:first-child { border-top: 1px solid rgba(200,225,255,.18); }
   .item > button {
     width: 100%; display: grid; grid-template-columns: 2.2rem 1fr auto; align-items: baseline;
@@ -130,13 +144,13 @@
     transition: color .25s;
   }
   .item > button:hover { color: #fff; }
-  .item > button:focus-visible { outline: 2px solid var(--accent-2); outline-offset: 2px; }
+  .item > button:focus-visible { outline: 2px solid var(--hot); outline-offset: 2px; }
   .no { font: .78rem ui-monospace, "JetBrains Mono", monospace; color: var(--ink-dim); transition: color .25s; }
   .name { font-size: 1.55rem; font-weight: 600; letter-spacing: -.01em; transition: transform .25s; }
   .item > button:hover .name { transform: translateX(4px); }
   .lang { font: .75rem ui-monospace, "JetBrains Mono", monospace; opacity: .75; }
   .item.on > button { color: #fff; }
-  .item.on .no { color: var(--accent); }
+  .item.on .no { color: var(--hot); }
   .item.on .name { transform: none; }
 
   .more { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .4s cubic-bezier(.2,.8,.2,1); }
@@ -144,11 +158,11 @@
   .more > div { overflow: hidden; padding-left: 2.2rem; }
   .desc { color: #d6e6ff; line-height: 1.6; font-size: .95rem; }
   .tech, .meta { margin-top: 12px; font: .8rem/1.6 ui-monospace, "JetBrains Mono", "Fira Code", monospace; color: var(--ink-dim); }
-  .tech { color: var(--accent-2); }
+  .tech { color: #fff; }
   .plinks { display: flex; flex-wrap: wrap; gap: 6px 22px; margin: 16px 0 22px; font: .85rem ui-monospace, "JetBrains Mono", monospace; }
-  .plinks a { color: var(--accent-2); text-decoration: none; border-bottom: 1px solid rgba(201,228,255,.4); padding-bottom: 1px; transition: color .2s, border-color .2s; }
-  .plinks a:hover { color: #fff; border-color: #fff; }
-  .plinks a:focus-visible { outline: 2px solid var(--accent-2); outline-offset: 3px; }
+  .plinks a { color: var(--hot); text-decoration: none; border-bottom: 1px solid rgba(255,255,255,.5); padding-bottom: 1px; transition: color .2s, border-color .2s; }
+  .plinks a:hover { color: var(--on-hot); background: var(--hot); border-color: var(--hot); }
+  .plinks a:focus-visible { outline: 2px solid var(--hot); outline-offset: 3px; }
 
   .stage {
     position: sticky; top: 24px;
@@ -164,6 +178,10 @@
     position: absolute; inset: 0; display: grid; grid-template: minmax(0, 1fr) / minmax(0, 1fr); place-items: center; padding: 6%;
     opacity: 0; transform: translateY(10px) scale(.98); pointer-events: none;
     transition: opacity .45s, transform .55s cubic-bezier(.2,.8,.2,1);
+  }
+  .win::after {
+    content: attr(data-tag); position: absolute; left: 20px; top: 12px;
+    font: .72rem ui-monospace, "JetBrains Mono", monospace; letter-spacing: .04em; color: var(--hot);
   }
   .win.on { opacity: 1; transform: none; pointer-events: auto; }
   .win img {
@@ -272,10 +290,10 @@
     </ol>
 
     <div class="stage">
-      <div class="win on" id="win-0" role="tabpanel" aria-labelledby="tab-0"><img src="img/termglass.png" width="1120" height="720" alt="TermGlass: три панели с vim, цветовой шкалой и diff"></div>
-      <div class="win" id="win-1" role="tabpanel" aria-labelledby="tab-1"><img src="img/amnezia.png" width="1110" height="750" alt="AmneziaWG Client: главный экран, подключено"></div>
-      <div class="win" id="win-2" role="tabpanel" aria-labelledby="tab-2"><img src="img/auth.png" width="490" height="780" alt="Authenticator: список кодов в тёмной теме"></div>
-      <div class="win" id="win-3" role="tabpanel" aria-labelledby="tab-3">
+      <div class="win on" id="win-0" data-tag="01 / termglass" role="tabpanel" aria-labelledby="tab-0"><img src="img/termglass.png" width="1120" height="720" alt="TermGlass: три панели с vim, цветовой шкалой и diff"></div>
+      <div class="win" id="win-1" data-tag="02 / amneziawg-client" role="tabpanel" aria-labelledby="tab-1"><img src="img/amnezia.png" width="1110" height="750" alt="AmneziaWG Client: главный экран, подключено"></div>
+      <div class="win" id="win-2" data-tag="03 / authenticator" role="tabpanel" aria-labelledby="tab-2"><img src="img/auth.png" width="490" height="780" alt="Authenticator: список кодов в тёмной теме"></div>
+      <div class="win" id="win-3" data-tag="04 / you are here" role="tabpanel" aria-labelledby="tab-3">
         <div class="term" style="background: rgba(2,12,45,.55)">
           <div><b>~ $</b> <i>open nettixdev-ctrl.github.io</i></div>
           <div>вы уже здесь</div>
@@ -344,6 +362,7 @@
       d.el.setAttribute('cx', x.toFixed(2)); d.el.setAttribute('cy', y.toFixed(2));
       d.el.setAttribute('r', (1.2 + d.k * 1.8).toFixed(2));
       d.el.setAttribute('opacity', (.4 + d.k * .6).toFixed(2));
+      d.el.style.fill = `color-mix(in srgb, var(--hot) ${(d.k * 100).toFixed(0)}%, #dcebff)`;
     }
     requestAnimationFrame(frame);
   };
