@@ -158,9 +158,10 @@
   .item.on .no { color: var(--hot); }
   .item.on .name { transform: none; }
 
-  .more { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .4s cubic-bezier(.2,.8,.2,1); }
+  .more { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .6s cubic-bezier(.22,.8,.2,1); }
   .item.on .more { grid-template-rows: 1fr; }
-  .more > div { overflow: hidden; padding-left: 2.2rem; }
+  .more > div { overflow: hidden; padding-left: 2.2rem; opacity: 0; transform: translateY(8px); transition: opacity .3s ease, transform .5s cubic-bezier(.22,.8,.2,1); }
+  .item.on .more > div { opacity: 1; transform: none; transition-delay: .2s; }
   .desc { color: #d6e6ff; line-height: 1.6; font-size: .95rem; }
   .tech, .meta { margin-top: 12px; font: .8rem/1.6 ui-monospace, "JetBrains Mono", "Fira Code", monospace; color: var(--ink-dim); }
   .tech { color: #fff; }
@@ -179,14 +180,14 @@
   }
   .win {
     position: absolute; inset: 0; display: grid; grid-template: minmax(0, 1fr) / minmax(0, 1fr); place-items: center; padding: 6%;
-    opacity: 0; transform: translateY(10px) scale(.98); pointer-events: none;
-    transition: opacity .45s, transform .55s cubic-bezier(.2,.8,.2,1);
+    opacity: 0; transform: translateY(var(--y, 32px)) scale(.97); pointer-events: none;
+    transition: opacity .4s ease, transform .8s cubic-bezier(.22,.8,.2,1);
   }
   .win::after {
     content: attr(data-tag); position: absolute; left: 20px; top: 12px;
     font: .72rem ui-monospace, "JetBrains Mono", monospace; letter-spacing: .04em; color: var(--hot);
   }
-  .win.on { opacity: 1; transform: none; pointer-events: auto; }
+  .win.on { opacity: 1; transform: none; pointer-events: auto; transition-delay: .18s; }
   .win img {
     display: block; max-width: 100%; max-height: 100%; min-height: 0; width: auto; height: auto;
     border-radius: 12px; border: 1px solid rgba(200,225,255,.28);
@@ -324,6 +325,7 @@
       tabs[i].setAttribute('aria-selected', on);
       tabs[i].tabIndex = on ? 0 : -1;
       it.querySelector('.more > div').inert = !on;
+      wins[i].style.setProperty('--y', i < n ? '-32px' : '32px');
       wins[i].classList.toggle('on', on);
     });
     if (focus) tabs[n].focus();
