@@ -27,11 +27,11 @@
     min-height: 100vh;
     font-family: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
     color: var(--ink);
-    background: #082a80;
+    background: #07246d;
     overflow-x: hidden;
   }
 
-  .hero { position: relative; z-index: 1; min-height: 100vh; display: grid; place-items: center; padding: 24px 16px 64px; }
+  .hero, .screen { position: relative; z-index: 1; min-height: 100vh; min-height: 100svh; display: grid; place-items: center; padding: 48px 16px 72px; }
   .cue {
     position: absolute; left: 50%; bottom: 22px; transform: translateX(-50%);
     font: .8rem ui-monospace, "JetBrains Mono", "Fira Code", monospace;
@@ -77,7 +77,9 @@
   }
   .handle { margin-top: 2px; color: var(--ink-dim); font-size: .95rem; }
 
-  .bio { margin: 20px 0 22px; font-size: 1.2rem; font-weight: 600; color: var(--hot); }
+  .quote { margin: 28px 4px 26px; padding: 0; text-align: center; }
+  .quote p { font-size: 1.5rem; font-weight: 600; line-height: 1.25; letter-spacing: -.015em; color: #fff; text-wrap: balance; }
+  .quote cite { display: block; margin-top: 12px; font: normal .82rem ui-monospace, "JetBrains Mono", "Fira Code", monospace; color: var(--ink-dim); }
 
   .term {
     text-align: left;
@@ -115,7 +117,7 @@
   /* ---- projects ---- */
   .work {
     position: relative; z-index: 1;
-    width: min(1040px, calc(100% - 32px)); margin: 0 auto 80px;
+    width: min(1040px, 100%); margin: 0 auto;
     padding: 34px 36px 38px;
     background: var(--glass);
     border: 1px solid var(--glass-edge);
@@ -203,6 +205,60 @@
     .win::after { display: none; }
   }
 
+  /* ---- about: stack + contact ---- */
+  .about-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 40px; }
+  .about-grid h2 { margin-bottom: 4px; font: 500 .95rem ui-monospace, "JetBrains Mono", "Fira Code", monospace; color: #fff; }
+  .rows { margin: 0; }
+  .rows > div { display: grid; grid-template-columns: 6.2rem minmax(0, 1fr); gap: 14px; align-items: baseline; padding: 16px 0; border-bottom: 1px solid rgba(200,225,255,.18); }
+  .rows > div:first-child { border-top: 1px solid rgba(200,225,255,.18); margin-top: 14px; }
+  .rows dt { font: .8rem ui-monospace, "JetBrains Mono", monospace; color: var(--ink-dim); }
+  .rows dd { margin: 0; line-height: 1.5; color: #fff; }
+  .rows dd span { color: var(--ink-dim); }
+
+  .reach { display: block; margin-top: 14px; }
+  .big {
+    position: relative; display: grid; grid-template-columns: 1fr auto; align-items: baseline; gap: 4px 16px;
+    padding: 20px 0 20px 2px; color: #fff; text-decoration: none;
+    border-bottom: 1px solid rgba(200,225,255,.18);
+    transition: padding .35s cubic-bezier(.22,.8,.2,1);
+  }
+  .reach .big:first-child { border-top: 1px solid rgba(200,225,255,.18); }
+  .big::before {
+    content: ""; position: absolute; left: -14px; top: -1px; bottom: -1px; width: 3px; background: var(--hot);
+    transform: scaleY(0); transform-origin: top; transition: transform .4s cubic-bezier(.22,.8,.2,1);
+  }
+  .big:hover, .big:focus-visible { padding-left: 14px; outline: none; }
+  .big:hover::before, .big:focus-visible::before { transform: scaleY(1); }
+  .big .k { grid-column: 1; font: .78rem ui-monospace, "JetBrains Mono", monospace; color: var(--ink-dim); }
+  .big .v { grid-column: 1; font-size: 1.55rem; font-weight: 600; letter-spacing: -.01em; }
+  .big .ar { grid-column: 2; grid-row: 1 / span 2; align-self: center; font-size: 1.4rem; transition: transform .3s; }
+  .big:hover .ar { transform: translate(3px, -3px); }
+
+  /* ---- side rail ---- */
+  .rail { position: fixed; right: 20px; top: 50%; transform: translateY(-50%); z-index: 5; display: flex; flex-direction: column; gap: 6px; }
+  .rail a { position: relative; display: block; width: 26px; height: 26px; }
+  .rail a::before {
+    content: ""; position: absolute; left: 50%; top: 50%; width: 9px; height: 9px; margin: -4.5px;
+    border: 1.5px solid rgba(255,255,255,.55); border-radius: 50%;
+    transition: background .3s, transform .3s, border-color .3s;
+  }
+  .rail a.on::before { background: #fff; border-color: #fff; transform: scale(1.25); }
+  .rail a:hover::before { border-color: #fff; }
+  .rail a::after {
+    content: attr(data-label); position: absolute; right: 30px; top: 50%; transform: translate(6px, -50%);
+    font: .75rem ui-monospace, "JetBrains Mono", monospace; letter-spacing: .04em; color: #fff; white-space: nowrap;
+    opacity: 0; pointer-events: none; transition: opacity .2s, transform .25s;
+  }
+  .rail a:hover::after, .rail a:focus-visible::after { opacity: 1; transform: translate(0, -50%); }
+  .rail a:focus-visible { outline: 2px solid var(--hot); border-radius: 50%; }
+  @media (max-width: 960px) { .rail { display: none; } }
+  @media (max-width: 860px) {
+    .about-grid { grid-template-columns: minmax(0, 1fr); gap: 28px; }
+    .rows > div { grid-template-columns: minmax(0, 1fr); gap: 4px; padding: 14px 0; }
+    .big .v { font-size: 1.3rem; }
+  }
+  @media (min-width: 961px) { .hero, .screen { padding-left: 64px; padding-right: 64px; } }
+
   footer { margin-top: 26px; font-size: .78rem; color: rgba(190,215,255,.55); }
 
   @media (prefers-reduced-motion: reduce) {
@@ -215,7 +271,7 @@
 <canvas id="topo" aria-hidden="true"></canvas>
 <canvas id="petals" aria-hidden="true"></canvas>
 
-<section class="hero">
+<section class="hero" id="top">
 <main class="card">
   <div class="avatar">
     <svg id="ring" viewBox="0 0 160 160" aria-hidden="true"></svg>
@@ -225,15 +281,10 @@
   <h1>nettixdev</h1>
   <p class="handle">@NettixDev-ctrl</p>
 
-  <p class="bio">страдаю хуйнёй</p>
-
-  <div class="term" aria-label="whoami">
-    <div><b>~ $</b> <i>whoami</i></div>
-    <div>nettixdev</div>
-    <div><b>~ $</b> <i>uname -r</i></div>
-    <div>6.18-cachyos-lts</div>
-    <div><b>~ $</b> <span class="caret"></span></div>
-  </div>
+  <blockquote class="quote">
+    <p>«какая то крутая фраза не придумал»</p>
+    <cite>— неттикс</cite>
+  </blockquote>
 
   <div class="links">
     <div class="pair">
@@ -253,7 +304,8 @@
 <a class="cue" href="#projects">проекты <span>↓</span></a>
 </section>
 
-<section class="work" id="projects">
+<section class="screen" id="projects">
+<div class="work">
   <div class="work-head"><span>~/<b>projects</b></span><span>04</span></div>
   <div class="work-grid">
     <ol class="index" role="tablist" aria-label="Проекты">
@@ -310,22 +362,65 @@
       </div>
     </div>
   </div>
+</div>
+<a class="cue" href="#about">обо мне <span>↓</span></a>
 </section>
 
+<section class="screen" id="about">
+<div class="work">
+  <div class="work-head"><span>~/<b>about</b></span><span>nettixdev</span></div>
+  <div class="about-grid">
+    <div>
+      <h2>Чем пользуюсь</h2>
+      <dl class="rows">
+        <div><dt>языки</dt><dd>TypeScript <span>/</span> JavaScript <span>/</span> HTML <span>/</span> CSS</dd></div>
+        <div><dt>система</dt><dd>Linux <span>/</span> CachyOS <span>/</span> KDE Plasma</dd></div>
+      </dl>
+    </div>
+    <div>
+      <h2>Где меня найти</h2>
+      <div class="reach">
+        <a class="big" href="https://github.com/NettixDev-ctrl" target="_blank" rel="noopener noreferrer"><span class="k">github</span><span class="v">NettixDev-ctrl</span><span class="ar">↗</span></a>
+        <a class="big" href="https://t.me/nettixcl" target="_blank" rel="noopener noreferrer"><span class="k">telegram</span><span class="v">@nettixcl</span><span class="ar">↗</span></a>
+      </div>
+    </div>
+  </div>
+</div>
+<a class="cue" href="#top">наверх <span>↑</span></a>
+</section>
+
+<nav class="rail" aria-label="Разделы">
+  <a href="#top" data-label="главная" aria-label="Главная"></a>
+  <a href="#projects" data-label="проекты" aria-label="Проекты"></a>
+  <a href="#about" data-label="обо мне" aria-label="Обо мне"></a>
+</nav>
+
 <script>
-// "проекты ↓": eased scroll down to the projects panel
+// sections: eased scroll between full-screen blocks + side rail that follows the current one
 (() => {
-  const cue = document.querySelector('.cue'), target = document.getElementById('projects');
-  if (!cue || !target || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const sections = ['top', 'projects', 'about'].map(id => document.getElementById(id));
+  const rail = [...document.querySelectorAll('.rail a')];
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // rail: the section crossing the middle of the viewport is the current one
+  const io = new IntersectionObserver(entries => entries.forEach(en => {
+    if (!en.isIntersecting) return;
+    rail.forEach(a => a.classList.toggle('on', a.getAttribute('href') === '#' + en.target.id));
+  }), { rootMargin: '-50% 0px -50% 0px' });
+  sections.forEach(el => el && io.observe(el));
+
+  if (reduce) return;
   const ease = t => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;   // easeInOutCubic
   let raf = 0;
   const stop = () => { cancelAnimationFrame(raf); raf = 0; };
   ['wheel', 'touchstart', 'keydown'].forEach(ev => addEventListener(ev, stop, { passive: true }));
-  cue.addEventListener('click', e => {
+  document.querySelectorAll('a.cue, .rail a').forEach(a => a.addEventListener('click', e => {
+    const target = document.getElementById(a.getAttribute('href').slice(1));
+    if (!target) return;
     e.preventDefault();
     stop();
     const from = scrollY;
-    const to = Math.min(target.getBoundingClientRect().top + from - 24, document.documentElement.scrollHeight - innerHeight);
+    const to = Math.min(target.getBoundingClientRect().top + from, document.documentElement.scrollHeight - innerHeight);
     const dur = Math.min(1400, 600 + Math.abs(to - from) * .45), t0 = performance.now();
     const tick = now => {
       const p = Math.min((now - t0) / dur, 1);
@@ -333,7 +428,7 @@
       raf = p < 1 ? requestAnimationFrame(tick) : 0;
     };
     raf = requestAnimationFrame(tick);
-  });
+  }));
 })();
 </script>
 <script>
