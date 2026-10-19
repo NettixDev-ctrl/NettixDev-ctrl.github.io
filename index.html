@@ -22,14 +22,22 @@
   html { color-scheme: dark; }
   body {
     min-height: 100vh;
-    display: grid;
-    place-items: center;
-    padding: 24px 16px;
     font-family: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
     color: var(--ink);
     background: #082a80;
     overflow-x: hidden;
   }
+
+  .hero { position: relative; z-index: 1; min-height: 100vh; display: grid; place-items: center; padding: 24px 16px 64px; }
+  .cue {
+    position: absolute; left: 50%; bottom: 22px; transform: translateX(-50%);
+    font: .8rem ui-monospace, "JetBrains Mono", "Fira Code", monospace;
+    color: var(--ink-dim); text-decoration: none; letter-spacing: .04em;
+    transition: color .2s;
+  }
+  .cue:hover { color: #fff; }
+  .cue span { display: inline-block; transition: transform .2s; }
+  .cue:hover span { transform: translateY(3px); }
 
   #topo { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
 
@@ -100,6 +108,77 @@
   .btn:active { transform: scale(.97); }
   .btn:focus-visible { outline: 2px solid var(--accent-2); outline-offset: 3px; }
 
+
+  /* ---- projects ---- */
+  .work { position: relative; z-index: 1; width: min(1040px, 100%); margin: 0 auto; padding: 56px 16px 110px; }
+  .work-head {
+    display: flex; justify-content: space-between; align-items: baseline;
+    margin-bottom: 22px; padding-bottom: 12px;
+    border-bottom: 1px solid rgba(200,225,255,.18);
+    font: .85rem ui-monospace, "JetBrains Mono", "Fira Code", monospace; color: var(--ink-dim);
+  }
+  .work-head b { color: #fff; font-weight: 500; }
+  .work-grid { display: grid; grid-template-columns: minmax(0, 360px) minmax(0, 1fr); gap: 32px; align-items: start; }
+
+  .index { list-style: none; padding: 0; }
+  .item { border-bottom: 1px solid rgba(200,225,255,.18); }
+  .item:first-child { border-top: 1px solid rgba(200,225,255,.18); }
+  .item > button {
+    width: 100%; display: grid; grid-template-columns: 2.2rem 1fr auto; align-items: baseline;
+    padding: 18px 0; text-align: left; cursor: pointer;
+    font: inherit; color: var(--ink-dim); background: none; border: 0;
+    transition: color .25s;
+  }
+  .item > button:hover { color: #fff; }
+  .item > button:focus-visible { outline: 2px solid var(--accent-2); outline-offset: 2px; }
+  .no { font: .78rem ui-monospace, "JetBrains Mono", monospace; color: var(--ink-dim); transition: color .25s; }
+  .name { font-size: 1.55rem; font-weight: 600; letter-spacing: -.01em; transition: transform .25s; }
+  .item > button:hover .name { transform: translateX(4px); }
+  .lang { font: .75rem ui-monospace, "JetBrains Mono", monospace; opacity: .75; }
+  .item.on > button { color: #fff; }
+  .item.on .no { color: var(--accent); }
+  .item.on .name { transform: none; }
+
+  .more { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .4s cubic-bezier(.2,.8,.2,1); }
+  .item.on .more { grid-template-rows: 1fr; }
+  .more > div { overflow: hidden; padding-left: 2.2rem; }
+  .desc { color: #d6e6ff; line-height: 1.6; font-size: .95rem; }
+  .tech, .meta { margin-top: 12px; font: .8rem/1.6 ui-monospace, "JetBrains Mono", "Fira Code", monospace; color: var(--ink-dim); }
+  .tech { color: var(--accent-2); }
+  .plinks { display: flex; flex-wrap: wrap; gap: 6px 22px; margin: 16px 0 22px; font: .85rem ui-monospace, "JetBrains Mono", monospace; }
+  .plinks a { color: var(--accent-2); text-decoration: none; border-bottom: 1px solid rgba(201,228,255,.4); padding-bottom: 1px; transition: color .2s, border-color .2s; }
+  .plinks a:hover { color: #fff; border-color: #fff; }
+  .plinks a:focus-visible { outline: 2px solid var(--accent-2); outline-offset: 3px; }
+
+  .stage {
+    position: sticky; top: 24px;
+    aspect-ratio: 1120 / 760;
+    background: var(--glass);
+    border: 1px solid var(--glass-edge);
+    border-radius: 24px;
+    backdrop-filter: blur(18px) saturate(140%);
+    -webkit-backdrop-filter: blur(18px) saturate(140%);
+    overflow: hidden;
+  }
+  .win {
+    position: absolute; inset: 0; display: grid; grid-template: minmax(0, 1fr) / minmax(0, 1fr); place-items: center; padding: 6%;
+    opacity: 0; transform: translateY(10px) scale(.98); pointer-events: none;
+    transition: opacity .45s, transform .55s cubic-bezier(.2,.8,.2,1);
+  }
+  .win.on { opacity: 1; transform: none; pointer-events: auto; }
+  .win img {
+    display: block; max-width: 100%; max-height: 100%; min-height: 0; width: auto; height: auto;
+    border-radius: 12px; border: 1px solid rgba(200,225,255,.28);
+    box-shadow: 0 14px 34px -18px rgba(0, 5, 30, .8);
+  }
+  .win .term { width: min(100%, 420px); }
+
+  @media (max-width: 860px) {
+    .work-grid { grid-template-columns: minmax(0, 1fr); gap: 20px; }
+    .stage { position: relative; top: 0; order: -1; }
+    .name { font-size: 1.35rem; }
+  }
+
   footer { margin-top: 26px; font-size: .78rem; color: rgba(190,215,255,.55); }
 
   @media (prefers-reduced-motion: reduce) {
@@ -112,6 +191,7 @@
 <canvas id="topo" aria-hidden="true"></canvas>
 <canvas id="petals" aria-hidden="true"></canvas>
 
+<section class="hero">
 <main class="card">
   <div class="avatar">
     <svg id="ring" viewBox="0 0 160 160" aria-hidden="true"></svg>
@@ -146,7 +226,95 @@
 
   <footer>© 2026 nettixdev</footer>
 </main>
+<a class="cue" href="#projects">проекты <span>↓</span></a>
+</section>
 
+<section class="work" id="projects">
+  <div class="work-head"><span>~/<b>projects</b></span><span>04</span></div>
+  <div class="work-grid">
+    <ol class="index" role="tablist" aria-label="Проекты">
+      <li class="item on">
+        <button role="tab" id="tab-0" aria-selected="true" aria-controls="win-0"><span class="no">01</span><span class="name">TermGlass</span><span class="lang">TypeScript</span></button>
+        <div class="more"><div>
+          <p class="desc">Минималистичный терминал в стиле стекла. Настоящие шеллы, вкладки и сплиты, палитра команд, темы и переключение шелла в один клик.</p>
+          <p class="tech">Electron / xterm.js / node-pty</p>
+          <p class="meta">Linux в приоритете · v0.1.0 · MIT</p>
+          <p class="plinks"><a href="https://github.com/NettixDev-ctrl/TermGlass" target="_blank" rel="noopener noreferrer">репозиторий ↗</a><a href="https://github.com/NettixDev-ctrl/TermGlass/releases/latest" target="_blank" rel="noopener noreferrer">релиз ↗</a></p>
+        </div></div>
+      </li>
+      <li class="item">
+        <button role="tab" id="tab-1" aria-selected="false" aria-controls="win-1" tabindex="-1"><span class="no">02</span><span class="name">AmneziaWG Client</span><span class="lang">TypeScript</span></button>
+        <div class="more"><div>
+          <p class="desc">Свободный клиент AmneziaWG 3.x. Страны строятся из твоих .conf-файлов, «подключено» показывается только после реального рукопожатия. Есть kill switch и раздельное туннелирование. Без аккаунтов и телеметрии.</p>
+          <p class="tech">amneziawg-go / nftables</p>
+          <p class="meta">Linux · Windows · v0.1.0</p>
+          <p class="plinks"><a href="https://github.com/NettixDev-ctrl/AmneziaWG-Client" target="_blank" rel="noopener noreferrer">репозиторий ↗</a><a href="https://github.com/NettixDev-ctrl/AmneziaWG-Client/releases/latest" target="_blank" rel="noopener noreferrer">релиз ↗</a></p>
+        </div></div>
+      </li>
+      <li class="item">
+        <button role="tab" id="tab-2" aria-selected="false" aria-controls="win-2" tabindex="-1"><span class="no">03</span><span class="name">Authenticator</span><span class="lang">JavaScript</span></button>
+        <div class="more"><div>
+          <p class="desc">Приложение для двухэтапной аутентификации. TOTP-коды считаются локально, ключи не покидают машину. Material Design 3, QR прямо с экрана, импорт из Google Authenticator.</p>
+          <p class="tech">Electron / TOTP / Material Design 3</p>
+          <p class="meta">Linux · Windows · Android · MIT</p>
+          <p class="plinks"><a href="https://github.com/NettixDev-ctrl/Authenticator" target="_blank" rel="noopener noreferrer">репозиторий ↗</a></p>
+        </div></div>
+      </li>
+      <li class="item">
+        <button role="tab" id="tab-3" aria-selected="false" aria-controls="win-3" tabindex="-1"><span class="no">04</span><span class="name">Эта страница</span><span class="lang">HTML</span></button>
+        <div class="more"><div>
+          <p class="desc">Топографический фон реагирует на курсор, а точки вокруг аватара тянутся к нему. Один файл, никаких библиотек.</p>
+          <p class="tech">HTML / CSS / canvas</p>
+          <p class="meta">Без зависимостей</p>
+          <p class="plinks"><a href="https://github.com/NettixDev-ctrl/NettixDev-ctrl.github.io" target="_blank" rel="noopener noreferrer">репозиторий ↗</a></p>
+        </div></div>
+      </li>
+    </ol>
+
+    <div class="stage">
+      <div class="win on" id="win-0" role="tabpanel" aria-labelledby="tab-0"><img src="img/termglass.png" width="1120" height="720" alt="TermGlass: три панели с vim, цветовой шкалой и diff"></div>
+      <div class="win" id="win-1" role="tabpanel" aria-labelledby="tab-1"><img src="img/amnezia.png" width="1110" height="750" alt="AmneziaWG Client: главный экран, подключено"></div>
+      <div class="win" id="win-2" role="tabpanel" aria-labelledby="tab-2"><img src="img/auth.png" width="490" height="780" alt="Authenticator: список кодов в тёмной теме"></div>
+      <div class="win" id="win-3" role="tabpanel" aria-labelledby="tab-3">
+        <div class="term" style="background: rgba(2,12,45,.55)">
+          <div><b>~ $</b> <i>open nettixdev-ctrl.github.io</i></div>
+          <div>вы уже здесь</div>
+          <div><b>~ $</b> <i>move cursor</i></div>
+          <div>фон и точки на аве следят за ним</div>
+          <div><b>~ $</b> <span class="caret"></span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+// projects: pick a project in the list, its window shows on the stage
+(() => {
+  const items = [...document.querySelectorAll('.item')];
+  const wins = [...document.querySelectorAll('.win')];
+  const tabs = items.map(i => i.querySelector('button'));
+  const select = (n, focus) => {
+    items.forEach((it, i) => {
+      const on = i === n;
+      it.classList.toggle('on', on);
+      tabs[i].setAttribute('aria-selected', on);
+      tabs[i].tabIndex = on ? 0 : -1;
+      it.querySelector('.more > div').inert = !on;
+      wins[i].classList.toggle('on', on);
+    });
+    if (focus) tabs[n].focus();
+  };
+  tabs.forEach((b, i) => {
+    b.addEventListener('click', () => select(i));
+    b.addEventListener('keydown', e => {
+      const d = e.key === 'ArrowDown' ? 1 : e.key === 'ArrowUp' ? -1 : 0;
+      if (d) { e.preventDefault(); select((i + d + tabs.length) % tabs.length, true); }
+    });
+  });
+  select(0);
+})();
+</script>
 <script>
 // avatar ring: slowly rotating dots that swell and brighten toward the cursor
 (() => {
